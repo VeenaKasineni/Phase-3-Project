@@ -32,16 +32,18 @@ public class EndToEndTest {
 		
 		addEmployee("John", "8000");
 		Assert.assertEquals(201, response.statusCode());
+		jpath = response.jsonPath();
+		employeeId = jpath.get("id");
 		response = GetAllEmployees();
 		jpath = response.jsonPath();
 		names = jpath.get("name");
 		Assert.assertTrue(names.get(0).equals("John"));
-		employeeIds = jpath.get("id");
-		employeeId = employeeIds.get(employeeIds.size() - 1);
 		
 		response = GetSingleEmployee(employeeId);
 		System.out.println(response.getBody().asString());
 		Assert.assertEquals(200, response.statusCode());
+		jpath = response.jsonPath();
+		Assert.assertTrue(jpath.get("name").equals("John"));
 		
 		updateEmployeeName(employeeId, "Smith");
 		System.out.println(response.getBody().asString());
